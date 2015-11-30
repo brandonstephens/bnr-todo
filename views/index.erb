@@ -1,0 +1,42 @@
+<h1>To Do List</h1>
+
+<ul>
+  <% @tasks.each do |task| %>
+    <li>
+      <form action="/<%= task.id %>" method="post" style="display: inline">
+        <input type="hidden" name="_method" value="patch">
+        <input type="hidden" name="done" value="1">
+        <input type="submit" value="&#10003;">
+      </form>
+
+      <form action="/<%= task.id %>" method="post" style="display: inline">
+        <input type="hidden" name="_method" value="delete">
+        <input type="submit" value="&times;">
+      </form>
+
+      <% if task.done? %>
+        <s><%= task %></s>
+      <% else %>
+        <%= task %>
+      <% end %>
+      
+      <% if task.due_date %>
+        (Due <%= task.due_date %>)
+      <% end %>
+
+      <% if @forecast.has_key?(task.due_date) %>
+        <img src="<%= @forecast[task.due_date] %>" height="16" alt="forecast icon">
+      <% end %>
+      <small><a href="/<%= task.id %>">Details</a></small>
+    </li>
+  <% end %>
+</ul>
+
+<form action="/" method="post">
+  <input type="text" name="description" placeholder="Add a new task">
+  <input type="submit" value="Add">
+</form>
+
+<form action="/export" method="post">
+  <input type="submit" value="Export to Gist">
+</form>
